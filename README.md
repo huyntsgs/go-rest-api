@@ -1,5 +1,5 @@
 
-This reposity is about basic CRUD RESTful API with Gin gonic framework and MySql as database store.
+The reposity is about basic CRUD RESTful API with Gin-gonic framework and MySql as database store.
 
 When working on RESTul api projects, we tend try to make them work and not much consider about how project adapts with the changes.
 
