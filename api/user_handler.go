@@ -30,12 +30,12 @@ func (h UserHandler) Login() gin.HandlerFunc {
 		var user models.User
 		err := c.BindJSON(&user)
 		if err != nil {
-			GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "")
+			GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "Invalid data")
 			return
 		}
 		// Validate user data
 		if !user.ValidateLogin() {
-			GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "")
+			GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "Invalid data")
 			return
 		}
 		u, errc := h.userStore.Login(&user)
@@ -65,13 +65,13 @@ func (h UserHandler) Register() gin.HandlerFunc {
 		var user models.User
 		err := c.BindJSON(&user)
 		if err != nil {
-			GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "")
+			GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "Invalid data")
 			return
 		}
 
 		// Validate user data
 		if !(user.Validate()) {
-			GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "")
+			GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "Invalid data")
 			return
 		}
 		errc := h.userStore.Register(&user)
