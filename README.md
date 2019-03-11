@@ -91,6 +91,8 @@ git clone https://github.com/huyntsgs/go-rest-api.git
 
 chmod +x start.sh
 
+cd go-rest-api/
+
 ./start.sh
 ````
 
