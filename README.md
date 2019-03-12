@@ -54,20 +54,20 @@ In setup router part in main.go, I used gin and group common api url. Some apis 
 The authorize uses crypto functions to encrypt/decrypt claim data as specified of JSON WEB TOKEN - JWT. The apis using authentication middleware are create, update and delete product.
 
 ````go
-	v1 := router.Group("/api/v1")
-	{
-		// Get products with params limit offset likes /products?limit=50&lastId=0
-		v1.GET("/products", productHandler.GetProducts())
-		v1.GET("/products/:productId", productHandler.GetSingleProduct())
-	}
-	v1.POST("/users/register", userHandler.Register())
-	v1.POST("/users/login", userHandler.Login())
-	v1.Use(api.Authorize())
-	{
-		v1.POST("/products", productHandler.CreateProduct())
-		v1.PUT("/products", productHandler.UpdateProduct())
-		v1.DELETE("/products/:productId", productHandler.DeleteProduct())
-	}
+v1 := router.Group("/api/v1")
+{
+	// Get products with params limit offset likes /products?limit=50&lastId=0
+	v1.GET("/products", productHandler.GetProducts())
+	v1.GET("/products/:productId", productHandler.GetSingleProduct())
+}
+v1.POST("/users/register", userHandler.Register())
+v1.POST("/users/login", userHandler.Login())
+v1.Use(api.Authorize())
+{
+	v1.POST("/products", productHandler.CreateProduct())
+	v1.PUT("/products", productHandler.UpdateProduct())
+	v1.DELETE("/products/:productId", productHandler.DeleteProduct())
+}
 ````
 
 We have totally seven apis.
