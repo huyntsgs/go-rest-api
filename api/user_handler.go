@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/huyntsgs/go-rest-api/models"
@@ -49,8 +50,13 @@ func (h UserHandler) Login() gin.HandlerFunc {
 			"userName": u.UserName,
 			"email":    u.Email,
 		}
-		// Generates token with expire time is 24 hours
-		token, _ := utils.GenToken(claimInfo, []byte(os.Getenv("TOKEN_KEY")), 24*60)
+		// Generates token with expire time is TOKEN_TIME hours
+		// Default is 24 hours
+		tokenTime, err := strconv.Atoi(os.Getenv("TOKEN_TIME"))
+		if err != nil {
+			tokenTime = 24
+		}
+		token, _ := utils.GenToken(claimInfo, []byte(os.Getenv("TOKEN_KEY")), tokenTime*60)
 		u.Password = ""
 		c.JSON(http.StatusOK, gin.H{
 			"status": "success", "res": u, "token": token,
