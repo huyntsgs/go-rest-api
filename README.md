@@ -5,13 +5,13 @@ When working on RESTul api projects, we tend try to make them work and not much 
 
 In this project, I organize source code structure in three main layers and explain how it can adapt with requirement change.
 
-#### models 
+### models 
 
 Contains all defination of data structures and used by all other layers. There are also the validation functions for data structures. 
 These validation functions are called in the api handles. As we can see the products, users model. 
 If there is any other data structure such as orders, customers..., will be put on this layer.
 
-#### store
+### store
 
 Responsible for database related job such as query, insert, update or delete. No business logic is implemented here.
 In store.go, I defined interfaces ProductStore, UserStore.
@@ -42,13 +42,13 @@ We will define MongoDB struct which embeds mgo.Session. In mongodb_products.go, 
 
 We obviously do not need to change any thing in the handles function and routers.
 
-#### api
+### api
 
 Contains all handles of api. 
 authHandler is a middleware which parses and validates json web token JWT. authHandler can set claim information to context for later using in main handles.
 productHandler contains all api for products. productHandler takes input is ProductStore inteface as we mentioned above.
 
-#### router
+### router
 
 In setup router part in main.go, I used gin and group common api url. Some apis need to be authenticated then will use the authentication middleware. 
 The authorize uses crypto functions to encrypt/decrypt claim data as specified of JSON WEB TOKEN - JWT. The apis using authentication middleware are create, update and delete product.
@@ -103,7 +103,7 @@ curl -X POST -H "Content-Type:application/json" -d "{\"userName\":\"huyntsgs\", 
 
 curl -X POST -H "Content-Type:application/json" -d "{\"email\":\"huyntsgs@gmail.com\", \"password\":\"pass123\"}"  http://127.0.0.1:8081/api/v1/users/login
 ````
-In order to authenticate apis, we need to set token from login to Authorization header.
+For authentication apis, we need to set token from return login api to Authorization header.
 
 ````bash
 curl -X POST -H "Content-Type:application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imh1eW50c2dzQGdtYWlsLmNvbSIsImV4cCI6MTU1MjM3NzE3NSwidXNlcklkIjoxLCJ1c2VyTmFtZSI6Imh1eW50c2dzIn0.Prxp4FCa684f6wjXXL1jMuAciqXd8zLme7_lOhNhiwM" -d "{\"productName\":\"IphoneXs\", \"image\":\"iphonexs.jpg\", \"rate\": 4}"  http://127.0.0.1:8081/api/v1/products
