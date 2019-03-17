@@ -1,11 +1,12 @@
-FROM golang:1.11-alpine
+FROM golang:1.11-alpine as builder
 RUN apk update && apk upgrade && apk add --no-cache bash git
-RUN go get github.com/huyntsgs/go-rest-api
+WORKDIR /app
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux GO11MODULE=ON go build .
 
-WORKDIR /go/src/github.com/huyntsgs/go-rest-api
-RUN CGO_ENABLED=0 go build
-
-RUN cp .env /go/bin
+FROM scratch 
+COPY --from=builder /app/go-rest-api .
+COPY --from=builder /app/.env .
 
 EXPOSE 8081
-CMD go-rest-api
+ENTRYPOINT ["/go-rest-api"]"
