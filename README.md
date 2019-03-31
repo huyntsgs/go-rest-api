@@ -87,13 +87,21 @@ We have totally seven apis.
 Make sure you have installed MySql database and setting database information correctly to .env file.
 
 ````bash
-git clone https://github.com/huyntsgs/go-rest-api.git
+$ git clone https://github.com/huyntsgs/go-rest-api.git
 
-chmod +x start.sh
+$ chmod +x start.sh
 
-cd go-rest-api/
+$ cd go-rest-api/
 
-./start.sh
+$ ./start.sh
+````
+#### Build project
+
+````bash
+$ make build
+
+$ make build-docker
+
 ````
 
 In order to interactive with application, we can use curl or postman. For simply, I use curl.
