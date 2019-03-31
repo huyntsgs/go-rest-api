@@ -45,7 +45,7 @@ func (h ProductHandle) GetProducts() gin.HandlerFunc {
 			}
 		}
 
-		// To boost api performance, we can cache product with lastId is key map[int64][]*models.Product
+		// To boost api performance, we can cache products
 		products, errc := h.productRepo.GetProducts(limit, offset, lastId)
 		if errc != nil {
 			log.Println(errc)

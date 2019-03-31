@@ -1,12 +1,11 @@
-FROM golang:1.11-alpine as builder
-RUN apk update && apk upgrade && apk add --no-cache bash git
-WORKDIR /app
-COPY . .
-RUN CGO_ENABLED=0 GOOS=linux GO11MODULE=ON go build .
+FROM alpine:latest
 
-FROM scratch 
-COPY --from=builder /app/go-rest-api .
-COPY --from=builder /app/.env .
+ENV BINARY_NAME gorestapi
+
+WORKDIR /app
+
+COPY $BINARY_NAME .
+COPY .env .
 
 EXPOSE 8081
-ENTRYPOINT ["/go-rest-api"]"
+ENTRYPOINT [ "/app/gorestapi" ]
