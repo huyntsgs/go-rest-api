@@ -6,15 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/huyntsgs/go-rest-api/api"
 
-	"time"
-
 	"github.com/huyntsgs/go-rest-api/store"
 	"github.com/joho/godotenv"
-)
-
-var (
-	BuildTime  string
-	CommitHash string
 )
 
 func main() {
@@ -24,8 +17,6 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	log.Printf("Server start with build time %s - commit hash: %s \n", BuildTime, CommitHash)
-	
 	var mySqlDB = new(store.MySqlDB)
 	mySqlDB.Connect()
 

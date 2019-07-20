@@ -25,16 +25,14 @@ func Authorize() gin.HandlerFunc {
 				switch vErr.Errors {
 				case jwt.ValidationErrorExpired: //JWT expired
 					log.Println("[Authorize]- Token Expired, get a new one")
-					GinAbort(c, http.StatusUnauthorized, TOKEN_EXPIRED, "Token Expired, get a new one")
-					return
 				default:
 					log.Printf("[Authorize]- ValidationError error: %+v\n", err)
 				}
 			default:
 				log.Printf("[Authorize]- Token parse error: %v\n", err)
 			}
-			log.Println("[Authorize]- No token found")
-			GinAbort(c, http.StatusUnauthorized, NO_TOKEN, "No token found")
+			log.Println("[Authorize]- Token Expired, get a new one")
+			GinAbort(c, http.StatusUnauthorized, TOKEN_EXPIRED, "")
 			return
 		}
 		if token.Valid {

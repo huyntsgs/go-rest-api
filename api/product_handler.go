@@ -7,17 +7,17 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/huyntsgs/go-rest-api/models"
-	"github.com/huyntsgs/go-rest-api/store"
+	//"github.com/huyntsgs/go-rest-api/store"
 )
 
 type ProductHandle struct {
-	productRepo store.ProductStore
+	productRepo ProductStore
 }
 
 // Creates new ProductHandle.
 // ProductHandle accepts ProductStore interface.
 // Any data store implements ProductStore could be input of the handle.
-func NewProductHandle(productStore store.ProductStore) ProductHandle {
+func NewProductHandle(productStore ProductStore) ProductHandle {
 	return ProductHandle{productStore}
 }
 
@@ -32,7 +32,7 @@ func (h ProductHandle) GetProducts() gin.HandlerFunc {
 		if len(c.Query("limit")) != 0 {
 			limit, err = strconv.Atoi(c.Query("limit"))
 			if err != nil {
-				GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "Invalid params")
+				GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "")
 				return
 			}
 		}
@@ -40,12 +40,12 @@ func (h ProductHandle) GetProducts() gin.HandlerFunc {
 		if len(c.Query("lastId")) > 0 {
 			lastId, err = strconv.ParseInt(c.Query("lastId"), 10, 64)
 			if err != nil {
-				GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "Invalid params")
+				GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "")
 				return
 			}
 		}
 
-		// To boost api performance, we can cache products
+		//products := []*models.Product{}
 		products, errc := h.productRepo.GetProducts(limit, offset, lastId)
 		if errc != nil {
 			log.Println(errc)
@@ -63,11 +63,14 @@ func (h ProductHandle) GetProducts() gin.HandlerFunc {
 // Function validates the parameters and call GetSingleProduct from ProductStore.
 func (h ProductHandle) GetSingleProduct() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		//var productId int64
+		//var product *models.Product
+		//var err error
 
 		productId, err := strconv.ParseInt(c.Param("productId"), 10, 64)
 		if err != nil {
 			log.Printf("GetSingleProduct.Error %v\n", err)
-			GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "Invalid params")
+			GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "")
 			return
 		}
 
@@ -97,12 +100,12 @@ func (h ProductHandle) CreateProduct() gin.HandlerFunc {
 		err := c.BindJSON(&product)
 		if err != nil {
 			log.Printf("CreateProduct.Error binding json %v\n", err)
-			GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "Invalid data")
+			GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "")
 			return
 		}
 
 		if !product.Validate() {
-			GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "Invalid data")
+			GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "")
 			return
 		}
 
@@ -133,12 +136,12 @@ func (h ProductHandle) UpdateProduct() gin.HandlerFunc {
 		err := c.BindJSON(&product)
 		if err != nil {
 			log.Printf("UpdateProduct.Error binding json %v\n", err)
-			GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "Invalid data")
+			GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "")
 			return
 		}
 
 		if !product.ValidateUpdate() {
-			GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "Invalid data")
+			GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "")
 			return
 		}
 
@@ -168,7 +171,7 @@ func (h ProductHandle) DeleteProduct() gin.HandlerFunc {
 		var err error
 		productId, err = strconv.ParseInt(c.Param("productId"), 10, 64)
 		if err != nil {
-			GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "Invalid params")
+			GinAbort(c, http.StatusBadRequest, INVALID_PARAMS, "")
 			return
 		}
 

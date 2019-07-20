@@ -9,6 +9,15 @@ import (
 // Using lastId will has better performance. lastId is retrieved from previous page query.
 func (mysql *MySqlDB) GetProducts(limit, offset int, lastId int64) ([]*models.Product, error) {
 
+	// productsT := cache[lastId]
+	// if productsT != nil && productsT.expire > time.Now().Unix() {
+	// 	return productsT.products, nil
+	// }
+	//db := GetDB()
+	// if db == nil {
+	// 	return nil, errors.New("Can not connect to database")
+	// }
+
 	query, err := mysql.DB.Query("SELECT * FROM products where product_id > ? ORDER BY product_id ASC limit ?", lastId, limit)
 	if err != nil {
 		return nil, models.NewError("Internal server error", ERR_INTERNAL)

@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/huyntsgs/go-rest-api/store"
+
 	"github.com/huyntsgs/go-rest-api/utils"
 )
 
@@ -18,7 +18,7 @@ func GinAbort(c *gin.Context, status, errCode int, msg string) {
 	c.Abort()
 }
 
-func SetupUserRouter(store store.UserStore) *gin.Engine {
+func SetupUserRouter(store UserStore) *gin.Engine {
 	router := gin.New()
 	router.Use(gin.Logger())
 	userHandler := NewUserHandler(store)
@@ -33,7 +33,7 @@ func SetupUserRouter(store store.UserStore) *gin.Engine {
 
 	return router
 }
-func SetupProductRouter(store store.ProductStore) *gin.Engine {
+func SetupProductRouter(store ProductStore) *gin.Engine {
 	router := gin.New()
 	productHandler := NewProductHandle(store)
 	// Always has versioning for api
